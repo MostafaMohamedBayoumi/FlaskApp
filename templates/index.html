@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Correction</title>
+</head>
+<body style="background-color: bisque;">
+    <h1>Grammar Correction</h1>
+    <form id="textForm">
+        <label for="textInput">Enter Text:</label><br>
+        <textarea id="textInput" name="text" rows="4" cols="50"></textarea><br><br>
+        <button type="button" onclick="processText()">Submit</button>
+    </form>
+
+    <div id="output">
+        <h2>Corrected Text:</h2>
+        <p id="correctedText"></p>
+    </div>
+
+    <script>
+        function processText() {
+            var text = document.getElementById("textInput").value;
+            fetch('/process', {
+                method: 'POST',
+                body: new URLSearchParams({
+                    'text': text
+                }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("correctedText").textContent = data.processed_text;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
